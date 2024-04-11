@@ -1,0 +1,4 @@
+config:
+  aws-native:region: us-east-1
+  rabbitmq:username: admin
+  rabbitmq:password: admin1234567890!@#$%^

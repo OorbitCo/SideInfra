@@ -1,0 +1,7 @@
+name: BaseInfra
+runtime: go
+description: Oorbit Base Infrastructure
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: ""
