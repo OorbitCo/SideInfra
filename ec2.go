@@ -5,6 +5,7 @@ import (
 	"github.com/pulumi/pulumi-aws/sdk/v6/go/aws/ec2"
 	"github.com/pulumi/pulumi-tls/sdk/v4/go/tls"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+	"io/ioutil"
 )
 
 func setupEC2SharedDrive(ctx *pulumi.Context) error {
@@ -152,5 +153,13 @@ func setupEC2SharedDrive(ctx *pulumi.Context) error {
 	ctx.Export("instancePublicIP", instance.PublicIp)
 	ctx.Export("privateKey", privateKey.PrivateKeyPem)
 	ctx.Export("publicKey", privateKey.PublicKeyOpenssh)
+	privateKey.PrivateKeyPem.ApplyT(func(privateKeyPem string) pulumi.String {
+		_ = ioutil.WriteFile("privateKey.pem", []byte(privateKeyPem), 0644)
+		return pulumi.String(privateKeyPem)
+	})
+	privateKey.PublicKeyOpenssh.ApplyT(func(publicKeyOpenssh string) pulumi.String {
+		_ = ioutil.WriteFile("publicKey.pub", []byte(publicKeyOpenssh), 0644)
+		return pulumi.String(publicKeyOpenssh)
+	})
 	return nil
 }
